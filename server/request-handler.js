@@ -14,7 +14,7 @@ this file and include it in basic-server.js so that it actually works.
 
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
-  //
+  //http://127.0.0.1:3000/classes/messages
   // They include information about both the incoming request, such as
   // headers and URL, and about the outgoing response, such as its status
   // and content.
@@ -70,3 +70,6 @@ var defaultCorsHeaders = {
   'access-control-allow-headers': 'content-type, accept, authorization',
   'access-control-max-age': 10 // Seconds.
 };
+
+// export requestHandler
+exports.requestHandler = requestHandler;
