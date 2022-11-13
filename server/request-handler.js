@@ -11,16 +11,24 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+const messagesData = [];
 
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
-  //http://127.0.0.1:3000/classes/messages
   // They include information about both the incoming request, such as
   // headers and URL, and about the outgoing response, such as its status
   // and content.
   //
   // Documentation for both request and response can be found in the HTTP section at
   // http://nodejs.org/documentation/api/
+
+
+
+  var messagesString ='';
+
+
+
+
 
   // Do some basic logging.
   //
@@ -39,20 +47,57 @@ var requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = 'text/plain';
+  headers['Content-Type'] = 'application/json';
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
 
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
   // up in the browser.
+  //http://127.0.0.1:3000/classes/messages
+
+  // if its a GET
+  if(request.method === "GET") {
+    console.log(request.url)
+    if (request.url === "/classes/messages") {
+      response.writeHead(statusCode, headers);
+    //  console.log('logged')
+      response.end(JSON.stringify(messagesData))
+    } else {
+      statusCode = 404;
+      response.writeHead(statusCode, headers)
+      response.end();
+    }
+  }
+
+  if(request.method == "POST") {
+    if (request.url === "/classes/messages") {
+      statusCode = 201;
+      //response.writeHead(statusCode, headers);
+      request.on('data', (chunk) => {
+       messagesString += chunk.toString();
+      })
+
+      request.on('end', () => {
+        //console.log(messagesString)
+        messagesData.unshift(JSON.parse(messagesString));
+        response.writeHead(statusCode, headers);
+        response.end();
+      })
+
+
+
+    }
+
+  }
+// e.preventdefault();
+
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end('Hello, World!');
+  //npm response.end('Hello, World!');
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).

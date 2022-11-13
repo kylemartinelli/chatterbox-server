@@ -2,7 +2,8 @@
 var http = require('http');
 
 // import requestHandler
-var {handleRequest} = require('./request-handler.js');
+var {requestHandler} = require('./request-handler.js');
+
 
 
 // Every server needs to listen on a port with a unique number. The
@@ -26,14 +27,14 @@ var ip = '127.0.0.1';
 //
 // After creating the server, we will tell it to listen on the given port and IP. */
 
-var tempRequestHandler = (req, res) => {
-  let numberOfVisitors = 0;
-	console.log(req.method);  // GET method!
-	let user = req.url.split('/')[1];
-	res.end(`Hello ${user} you\'re visitor #${++numberOfVisitors}`);
-}
+// var tempRequestHandler = (req, res) => {
+//   let numberOfVisitors = 0;
+// 	console.log(req.method);  // GET method!
+// 	let user = req.url.split('/')[1];
+// 	res.end(`Hello ${user} you\'re visitor #${++numberOfVisitors}`);
+// }
 
-var server = http.createServer(handleRequest);
+var server = http.createServer(requestHandler);
 
 console.log('Listening on http://' + ip + ':' + port);
 
